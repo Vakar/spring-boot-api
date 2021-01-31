@@ -1,5 +1,6 @@
 package com.example.springsocial.controller;
 
+import com.example.springsocial.controller.wrapper.IgnoreResponseBinding;
 import com.example.springsocial.exception.BadRequestException;
 import com.example.springsocial.model.AuthProvider;
 import com.example.springsocial.model.User;
@@ -38,6 +39,7 @@ public class AuthController {
     @Autowired
     private TokenProvider tokenProvider;
 
+    @IgnoreResponseBinding
     @PostMapping("/login")
     public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
@@ -54,8 +56,10 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
+    @IgnoreResponseBinding
     @PostMapping("/signup")
     public ResponseEntity<?> registerUser(@Valid @RequestBody SignUpRequest signUpRequest) {
+
         if(userRepository.existsByEmail(signUpRequest.getEmail())) {
             throw new BadRequestException("Email address already in use.");
         }
